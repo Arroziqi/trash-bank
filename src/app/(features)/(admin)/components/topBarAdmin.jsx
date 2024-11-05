@@ -4,7 +4,7 @@ import Color from "../const/color";
 export default function TopBarAdmin() {
   return (
     <div
-      className="h-[141px] w-full fixed py-[27px] px-[128px] pt-[66px]"
+      className="h-[141px] w-full fixed z-10 py-[27px] px-[128px] pt-[66px]"
       style={{ backgroundColor: Color.light }}
     >
       <div className="flex gap-3 items-center justify-end">

@@ -6,7 +6,7 @@ import SidebarMenuAdmin from "./sidebarMenuAdmin";
 export default function SidebarAdmin({ className = "" }) {
   return (
     <nav
-      className={`px-6 py-16 fixed left-0 top-0 bottom-0 rounded-e-2xl ${className}`}
+      className={`px-6 py-16 fixed z-30 left-0 top-0 bottom-0 rounded-e-2xl ${className}`}
       style={{ backgroundColor: Color.primary }}
     >
       <div className="flex flex-col justify-between h-full">

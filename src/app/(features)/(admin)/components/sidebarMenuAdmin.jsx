@@ -1,31 +1,35 @@
-import DashboardPage from "../dashboard/page";
+"use client";
+
+import { useRouter } from "next/compat/router";
 import SidebarItemAdmin from "./sidebarItemAdmin";
+import SidebarMenuDropdown from "./sidebarMenuDropdown";
 
 export default function SidebarMenuAdmin({}) {
+  const router = useRouter();
+
+  // const isActive = (path) => router.pathname === path;
+  // console.log(isActive("/dashboard"));
+
   return (
     <>
       <ul className="flex flex-col gap-4">
         <li>
           <SidebarItemAdmin
             className=""
-            href={""}
+            href={"/dashboard"}
             text={"Dashboard"}
             iconUrl={"/img/admin/home.svg"}
             isActive={true}
+            // isActive={isActive("/dashboard")}
           />
+        </li>
+        <li>
+          <SidebarMenuDropdown />
         </li>
         <li>
           <SidebarItemAdmin
             className=""
-            href={""}
-            text={"Konfigurasi Data"}
-            iconUrl={"/img/admin/config.svg"}
-          />
-        </li>
-        <li>
-          <SidebarItemAdmin
-            className=""
-            href={""}
+            href={"/transaction"}
             text={"Transaksi"}
             iconUrl={"/img/admin/transaction.svg"}
           />
@@ -33,7 +37,7 @@ export default function SidebarMenuAdmin({}) {
         <li>
           <SidebarItemAdmin
             className=""
-            href={""}
+            href={"/content-management"}
             text={"Kelola Konten"}
             iconUrl={"/img/admin/content-management.svg"}
           />
