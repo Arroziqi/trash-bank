@@ -26,6 +26,7 @@ export default async function signIn({ usernameOrPhone, password }) {
     console.log(data);
 
     cookieStore.set("token", data.user.token);
+    cookieStore.set("role", data.user.role);
 
     return data;
   } catch (error) {

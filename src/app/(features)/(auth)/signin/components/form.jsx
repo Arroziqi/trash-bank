@@ -24,7 +24,11 @@ export default function FormSignin() {
         password: password,
       });
 
-      router.push("/profile");
+      if (response.user.role === "Admin") {
+        router.push("/dashboard");
+      } else {
+        router.push("/profile");
+      }
     } catch (error) {
       throw new Error(error.message);
     }

@@ -1,3 +1,5 @@
+"use client";
+
 import FormContainer from "../../components/formContainer";
 import Heading1 from "../../components/heading1";
 import InputSubmit from "../../components/input/inputSubmit";
