@@ -1,3 +1,5 @@
+"use client";
+
 import FormContainer from "../../components/formContainer";
 import Heading1 from "../../components/heading1";
 import InputSelect from "../../components/input/inputSelect";
@@ -6,7 +8,7 @@ import InputText from "../../components/input/inputText";
 
 export default function FormWasteType() {
   return (
-    <FormContainer>
+    <FormContainer onSubmit={() => {}}>
       <Heading1 text={"Daftarkan jenis sampah kamu"} />
       <div className="flex flex-col gap-6">
         <InputSelect
@@ -23,6 +25,7 @@ export default function FormWasteType() {
           id={"waste-category"}
           label={"Jenis Sampah"}
           placeholder={"Masukan jenis sampah (contoh: botol plastik)"}
+          onChange={() => {}}
         />
       </div>
       <div className="flex justify-end">
