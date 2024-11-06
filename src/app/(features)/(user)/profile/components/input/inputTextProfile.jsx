@@ -1,6 +1,11 @@
 import LabelInputUserProfile from "../labelInputUserProfile";
 
-export default function InputTextProfile({ label, id, value = "", onchange }) {
+export default function InputTextProfile({
+  label,
+  id,
+  value = "",
+  onchange = () => {},
+}) {
   return (
     <div className="">
       <LabelInputUserProfile text={label} id={id} />

@@ -1,13 +1,41 @@
+"use client";
+
+import { useState } from "react";
 import Divider from "../../components/divider";
 import FormAuthContainer from "../../components/formAuthContainer";
 import Heading1 from "../../components/heading1";
 import InputCheckbox from "../../components/input/inputCheckbox";
 import InputSubmit from "../../components/input/inputSubmit";
 import InputText from "../../components/input/inputText";
-import Logo from "../../components/logo";
 import SubTitle from "../../components/subTitle";
 
 export default function FormSignup() {
+  const [username, setUsername] = useState("");
+  const [phone, setPhone] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+
+  const handleSignup = async (e) => {
+    e.preventDefault();
+    try {
+      const response = await fetch("http://localhost:5000/api/users", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ username, phone, password, confirmPassword }),
+      });
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.message || "Signup failed");
+      }
+      console.log(data);
+    } catch (error) {
+      throw new Error(error.message);
+    }
+  };
+
   return (
     <FormAuthContainer>
       <div className="text-left">
