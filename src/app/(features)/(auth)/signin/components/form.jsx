@@ -24,7 +24,7 @@ export default function FormSignin() {
         password: password,
       });
 
-      if (response.user.role === "Admin") {
+      if (response.isAdmin) {
         router.push("/dashboard");
       } else {
         router.push("/profile");

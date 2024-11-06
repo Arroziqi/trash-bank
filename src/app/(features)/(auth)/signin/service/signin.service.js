@@ -2,6 +2,7 @@
 
 import { API_BASE_URL } from "@/app/const/const";
 import { cookies } from "next/headers";
+import bcrypt from "bcrypt";
 
 export default async function signIn({ usernameOrPhone, password }) {
   const cookieStore = await cookies();
@@ -26,9 +27,11 @@ export default async function signIn({ usernameOrPhone, password }) {
     console.log(data);
 
     cookieStore.set("token", data.user.token);
-    cookieStore.set("role", data.user.role);
+    cookieStore.set("user-role", data.user.role);
 
-    return data;
+    const isAdmin = await bcrypt.compare("Admin", data.user.role);
+
+    return { data, isAdmin };
   } catch (error) {
     console.log(error);
     throw new Error(error.message);
