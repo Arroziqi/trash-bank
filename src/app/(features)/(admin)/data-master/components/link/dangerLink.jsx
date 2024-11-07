@@ -1,18 +1,20 @@
 "use client";
 
+import Link from "next/link";
+
 export default function DangerLink({
   text,
   className = "",
   onClick = () => {},
-  href,
+  href = "",
 }) {
   return (
-    <a
+    <Link
       href={href}
       onClick={onClick}
       className={`text-red-500 underline ${className}`}
     >
       {text}
-    </a>
+    </Link>
   );
 }

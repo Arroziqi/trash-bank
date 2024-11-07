@@ -20,10 +20,13 @@ export default function TableTransaction({ isDataUpdated }) {
         <tbody>
           <tr>
             <TdDataMaster>EUIS</TdDataMaster>
-            
+            <TdDataMaster>Plastik</TdDataMaster>
+            <TdDataMaster>5 Kilogram</TdDataMaster>
+            <TdDataMaster>Rp60.000</TdDataMaster>
+
             <TdDataMaster>
               <div className="flex gap-4">
-                <PrimaryLink text={"Lihat"} href={"/transaction/3"} />
+                <PrimaryLink text={"Lihat"} href={"/transaction/1/detail/3"} />
                 <PrimaryLink text={"Edit"} />
                 <DangerLink text={"Hapus"} />
               </div>
