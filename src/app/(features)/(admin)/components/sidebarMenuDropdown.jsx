@@ -1,12 +1,23 @@
+"use client";
+
+import { usePathname } from "next/navigation";
 import SidebarItemAdmin from "./sidebarItemAdmin";
 
-export default function SidebarMenuDropdown({ isActive = false }) {
+export default function SidebarMenuDropdown({
+  isActive = false,
+  iconUrl = "",
+}) {
+  const pathName = usePathname();
+
+  const isSubmenuIsActive = (path) =>
+    pathName === path || pathName.startsWith(path + "/");
+
   return (
     <div className="flex flex-col gap-1">
       <SidebarItemAdmin
         href={""}
         text={"Konfigurasi Data"}
-        iconUrl={"/img/admin/config.svg"}
+        iconUrl={iconUrl}
         isDropdown={true}
         isActive={isActive}
       />
@@ -14,18 +25,22 @@ export default function SidebarMenuDropdown({ isActive = false }) {
         <SidebarItemAdmin
           href={"/data-master/waste-category"}
           text={"Kategori Sampah"}
+          isActive={isSubmenuIsActive("/data-master/waste-category")}
         />
         <SidebarItemAdmin
           href={"/data-master/waste-type"}
           text={"Jenis Sampah"}
+          isActive={isSubmenuIsActive("/data-master/waste-type")}
         />
         <SidebarItemAdmin
           href={"/data-master/unit-of-measurement"}
           text={"Unit Pengukuran"}
+          isActive={isSubmenuIsActive("/data-master/unit-of-measurement")}
         />
         <SidebarItemAdmin
           href={"/data-master/waste-price"}
           text={"Harga Sampah"}
+          isActive={isSubmenuIsActive("/data-master/waste-price")}
         />
       </div>
     </div>

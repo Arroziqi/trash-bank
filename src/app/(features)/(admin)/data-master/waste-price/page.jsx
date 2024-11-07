@@ -1,3 +1,5 @@
+"use client";
+
 import Heading1 from "../components/heading1";
 import FormWastePrice from "./components/form";
 import TableWastePrice from "./components/table";

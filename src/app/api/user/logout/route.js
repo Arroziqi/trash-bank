@@ -22,7 +22,8 @@ export async function DELETE(req) {
       });
     }
 
-    cookieStore.delete('token');
+    cookieStore.delete("token");
+    cookieStore.delete("user-role");
 
     return new Response(JSON.stringify({ message: "Logout successful" }), {
       status: 200,

@@ -1,3 +1,5 @@
+"use client";
+
 import Color from "../../../const/color";
 
 export default function TableWastePrice() {

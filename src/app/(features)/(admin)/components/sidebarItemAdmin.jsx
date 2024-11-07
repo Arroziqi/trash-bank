@@ -8,9 +8,11 @@ export default function SidebarItemAdmin({
   iconUrl = "",
   isActive = false,
   isDropdown = false,
+  onClick = () => {},
 }) {
   return (
     <Link
+      onClick={onClick}
       href={href}
       className={`flex items-center gap-4 py-2 px-3 rounded-lg font-bold text-lg ${className}`}
       style={
