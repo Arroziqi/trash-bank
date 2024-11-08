@@ -23,7 +23,7 @@ export default function Page({ params }) {
         <Heading1 text={"Daftar transaksi sesi  17-10-2024"} />
         <ButtonSort text={"Urutkan"} onClick={() => console.log(sessionId)} />
       </div>
-      <TableTransaction isDataUpdated={isDataUpdated} />
+      <TableTransaction isDataUpdated={isDataUpdated} sessionId={sessionId} />
     </div>
   );
 }

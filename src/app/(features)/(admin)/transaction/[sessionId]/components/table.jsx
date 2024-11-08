@@ -3,8 +3,49 @@ import DangerLink from "../../../data-master/components/link/dangerLink";
 import PrimaryLink from "../../../data-master/components/link/primaryLink";
 import TdDataMaster from "../../../data-master/components/table/td";
 import ThDataMaster from "../../../data-master/components/table/th";
+import { useEffect, useState } from "react";
+import Cookies from "js-cookie";
+import { API_BASE_URL } from "@/app/const/const";
 
-export default function TableTransaction({ isDataUpdated }) {
+export default function TableTransaction({ isDataUpdated, sessionId }) {
+  const [token, setToken] = useState(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [transactionData, setTransactionData] = useState([]);
+  const [transactionDataSelected, setTransactionDataSelected] = useState(null);
+  const [transactionDataSelectedId, setTransactionDataSelectedId] = useState(null);
+
+  const fetchData = async () => {
+    try {
+      const response = await fetch(`${API_BASE_URL}/transaction/getOne/`, {
+        method: "GET",
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to fetch transactions data");
+      }
+      const data = await response.json();
+      console.log(data);
+
+      setTransactionData(data.data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const openModal = (event, data, id) => {
+    if (event?.preventDefault) event.preventDefault();
+
+    setTransactionDataSelected(data);
+    setTransactionDataSelectedId(id);
+    setIsModalOpen((prev) => !prev);
+  };
+
+  useEffect(() => {
+    const tokenValue = Cookies.get("token");
+    setToken(tokenValue);
+    fetchData();
+  }, []);
+
   return (
     <>
       <table className="border-collapse table-auto rounded-ss-lg w-full">
