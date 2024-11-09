@@ -2,7 +2,8 @@
 
 import { usePathname, useRouter } from "next/navigation";
 import SidebarItemAdmin from "./sidebarItemAdmin";
-import SidebarMenuDropdown from "./sidebarMenuDropdown";
+import DataConfigurationSidebarMenu from "./dataConfigurationSidebarMenu";
+import ContentManagementSidebarMenu from "./contentManagementSidebarMenu";
 
 export default function SidebarMenuAdmin({}) {
   const pathtName = usePathname();
@@ -52,7 +53,7 @@ export default function SidebarMenuAdmin({}) {
             />
           </li>
           <li>
-            <SidebarMenuDropdown
+            <DataConfigurationSidebarMenu
               iconUrl={
                 isActive("/data-master")
                   ? "/img/admin/config-dark.svg"
@@ -75,10 +76,7 @@ export default function SidebarMenuAdmin({}) {
             />
           </li>
           <li>
-            <SidebarItemAdmin
-              className=""
-              href={"/content-management"}
-              text={"Kelola Konten"}
+            <ContentManagementSidebarMenu
               iconUrl={
                 isActive("/content-management")
                   ? "/img/admin/content-management-dark.svg"

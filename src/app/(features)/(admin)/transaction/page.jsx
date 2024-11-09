@@ -15,7 +15,7 @@ export default function TransactionPage() {
           text={"Tambah Sesi"}
           onClick={(e) => {
             e.preventDefault();
-            router.push("/transaction/1");
+            router.push("/transaction/create");
           }}
         />
       </div>

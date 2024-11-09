@@ -1,3 +1,5 @@
+"use client";
+
 import Color from "../../../const/color";
 import DangerLink from "../../../data-master/components/link/dangerLink";
 import PrimaryLink from "../../../data-master/components/link/primaryLink";
@@ -12,7 +14,8 @@ export default function TableTransaction({ isDataUpdated, sessionId }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [transactionData, setTransactionData] = useState([]);
   const [transactionDataSelected, setTransactionDataSelected] = useState(null);
-  const [transactionDataSelectedId, setTransactionDataSelectedId] = useState(null);
+  const [transactionDataSelectedId, setTransactionDataSelectedId] =
+    useState(null);
 
   const fetchData = async () => {
     try {
@@ -43,8 +46,10 @@ export default function TableTransaction({ isDataUpdated, sessionId }) {
   useEffect(() => {
     const tokenValue = Cookies.get("token");
     setToken(tokenValue);
-    fetchData();
-  }, []);
+    if (sessionId != "create") {
+      fetchData();
+    }
+  }, [sessionId]);
 
   return (
     <>

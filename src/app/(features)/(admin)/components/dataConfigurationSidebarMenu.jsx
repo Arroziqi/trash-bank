@@ -3,7 +3,7 @@
 import { usePathname } from "next/navigation";
 import SidebarItemAdmin from "./sidebarItemAdmin";
 
-export default function SidebarMenuDropdown({
+export default function DataConfigurationSidebarMenu({
   isActive = false,
   iconUrl = "",
 }) {
