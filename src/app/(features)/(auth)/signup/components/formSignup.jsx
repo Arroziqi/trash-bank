@@ -8,6 +8,7 @@ import InputCheckbox from "../../components/input/inputCheckbox";
 import InputSubmit from "../../components/input/inputSubmit";
 import InputText from "../../components/input/inputText";
 import SubTitle from "../../components/subTitle";
+import signup from "../service/signup";
 
 export default function FormSignup() {
   const [username, setUsername] = useState("");
@@ -18,19 +19,19 @@ export default function FormSignup() {
   const handleSignup = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch("http://localhost:5000/api/users", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ username, phone, password, confirmPassword }),
+      const response = await signup({
+        username: username,
+        phone: phone,
+        password: password,
+        confirmPassword: confirmPassword,
       });
-      const data = await response.json();
 
-      if (!response.ok) {
-        throw new Error(data.message || "Signup failed");
-      }
-      console.log(data);
+      console.log(response);
+
+      setUsername("");
+      setPhone("");
+      setPassword("");
+      setConfirmPassword("");
     } catch (error) {
       throw new Error(error.message);
     }
@@ -47,11 +48,31 @@ export default function FormSignup() {
         />
       </div>
       <Divider />
-      <form action="" className=" flex flex-col gap-6">
-        <InputText type={"username"} placeholder={"Username"} />
-        <InputText type={"noHandphone"} placeholder={"No Handphone"} />
-        <InputText type={"password"} placeholder={"Password"} />
-        <InputText type={"password"} placeholder={"Confirm Password"} />
+      <form action="" className=" flex flex-col gap-6" onSubmit={handleSignup}>
+        <InputText
+          type={"username"}
+          placeholder={"Username"}
+          value={username}
+          onChange={(e) => setUsername(e.target.value)}
+        />
+        <InputText
+          type={"noHandphone"}
+          placeholder={"No Handphone"}
+          value={phone}
+          onChange={(e) => setPhone(e.target.value)}
+        />
+        <InputText
+          type={"password"}
+          placeholder={"Password"}
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+        />
+        <InputText
+          type={"password"}
+          placeholder={"Confirm Password"}
+          value={confirmPassword}
+          onChange={(e) => setConfirmPassword(e.target.value)}
+        />
         <br />
         <InputCheckbox
           label={"I agree to platforms Terms of service and Privacy policy"}
