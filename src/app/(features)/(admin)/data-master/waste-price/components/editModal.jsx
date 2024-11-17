@@ -13,16 +13,20 @@ import Cookies from "js-cookie";
 export default function EditModal({
   openModal,
   closeModal,
-  type = "",
+  price = "",
   id = "",
-  categoryId = "",
-  wasteCategories = [],
+  typeId = "",
+  unitId = "",
+  wasteTypes = [],
+  wasteUnits = [],
   fetchData,
 }) {
   const [open, setOpen] = useState(openModal);
-  const [newWasteType, setNewWasteType] = useState(type);
-  const [wasteTypeId, setWasteTypeId] = useState(id);
-  const [wasteCategoryId, setWasteCategoryId] = useState(categoryId);
+  const [newPrice, setNewPrice] = useState(price);
+  const [newWasteTypeId, setNewWasteTypeId] = useState(typeId);
+  const [newUnitId, setNewUnitId] = useState(unitId);
+  const [wasteTypeOptions, setWasteTypeOptions] = useState([]);
+  const [wasteUnitOptions, setWasteUnitOptions] = useState([]);
 
   const closeModalHandler = (e) => {
     closeModal(e);
@@ -33,40 +37,63 @@ export default function EditModal({
     e.preventDefault();
     try {
       const tokenValue = Cookies.get("token");
+      const userRole = Cookies.get("user-role");
+
+      console.log(newWasteTypeId, newUnitId, newPrice, tokenValue, userRole);
+
       const response = await fetch(
-        `http://localhost:5000/api/waste-type/update/${wasteTypeId}`,
+        `http://localhost:5000/api/pricelist/update`,
         {
-          method: "PUT",
+          method: "PATCH",
           headers: {
             "Content-Type": "application/json",
             Authorization: tokenValue,
+            Cookie: `user-role=${encodeURIComponent(userRole)}`,
           },
           credentials: "include",
           body: JSON.stringify({
-            type: newWasteType,
-            waste_category_id: wasteCategoryId,
-            isDeleted: false,
+            waste_type_id: newWasteTypeId,
+            uom_id: newUnitId,
+            price: newPrice,
+            isActive: true,
+            start_date: "2022-01-01T00:00:00.000Z",
+            end_date: "2022-12-31T00:00:00.000Z",
           }),
         }
       );
 
-      if (!response.ok) throw new Error("Failed to update waste type");
+      if (!response.ok) throw new Error("Failed to update waste price");
 
       const data = await response.json();
-      console.log("Waste type updated successfully:", data);
+      console.log("Waste price updated successfully:", data);
 
       fetchData(); // Refresh list after updating
     } catch (error) {
-      console.error("Error updating waste type:", error);
+      console.error("Error updating waste price:", error);
     }
   };
 
   useEffect(() => {
+    setWasteTypeOptions(
+      wasteTypes.map((item) => ({
+        value: item.id,
+        label: item.type,
+      }))
+    );
+    setWasteUnitOptions(
+      wasteUnits.map((item) => ({
+        value: item.id,
+        label: item.unit,
+      }))
+    );
+  }, [wasteTypes, wasteUnits]);
+
+  useEffect(() => {
     setOpen(openModal);
-    setNewWasteType(type);
-    setWasteCategoryId(categoryId);
-    setWasteTypeId(id);
-  }, [openModal, categoryId, type, id]);
+    setNewPrice(price);
+    setNewWasteTypeId(typeId);
+    setNewUnitId(unitId);
+  }, [openModal, price, typeId, unitId]);
 
   return (
     <Dialog open={open} onClose={closeModalHandler} className="relative z-10">
@@ -89,28 +116,13 @@ export default function EditModal({
                       as="h3"
                       className="text-base font-semibold text-gray-900"
                     >
-                      Edit Jenis Sampah
+                      Edit Harga Sampah
                     </DialogTitle>
-                    <div className="mt-2">
-                      <select
-                        name={wasteCategoryId}
-                        id={wasteCategoryId}
-                        onChange={(e) => setWasteCategoryId(e.target.value)}
-                        className="w-full outline-none border border-[#276561] py-[10px] px-6 rounded-lg font-bold"
-                        value={wasteCategoryId}
-                      >
-                        {wasteCategories.map((option) => (
-                          <option key={option.value} value={option.value}>
-                            {option.label}
-                          </option>
-                        ))}
-                      </select>
-                    </div>
                     <div className="mt-2">
                       <input
                         type="text"
-                        value={newWasteType}
-                        onChange={(e) => setNewWasteType(e.target.value)}
+                        value={newPrice}
+                        onChange={(e) => setNewPrice(e.target.value)}
                         className="w-full outline-none border border-[#276561] py-[10px] px-6 rounded-lg font-bold"
                       />
                     </div>

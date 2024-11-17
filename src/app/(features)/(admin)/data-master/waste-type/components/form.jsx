@@ -8,7 +8,10 @@ import InputSubmit from "../../components/input/inputSubmit";
 import InputText from "../../components/input/inputText";
 import Cookies from "js-cookie";
 
-export default function FormWasteType({ onFormSubmit }) {
+export default function FormWasteType({
+  onFormSubmit,
+  setOptionsWasteCategories,
+}) {
   const [token, setToken] = useState(null);
   const [wasteCategories, setWasteCategories] = useState([]);
   const [options, setOptions] = useState([]);
@@ -71,7 +74,8 @@ export default function FormWasteType({ onFormSubmit }) {
       label: category.category,
     }));
     setOptions(newOptions);
-  }, [wasteCategories]);
+    setOptionsWasteCategories(newOptions);
+  }, [wasteCategories, setOptionsWasteCategories]);
 
   useEffect(() => {
     fetchData();

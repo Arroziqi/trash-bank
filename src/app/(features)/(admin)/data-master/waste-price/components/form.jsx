@@ -9,7 +9,11 @@ import InputText from "../../components/input/inputText";
 import Cookies from "js-cookie";
 import { API_BASE_URL } from "@/app/const/const";
 
-export default function FormWastePrice({ onFormSubmit }) {
+export default function FormWastePrice({
+  onFormSubmit,
+  setWasteTypes,
+  setWasteUnits,
+}) {
   const [wasteType, setWasteType] = useState([]);
   const [wasteUnit, setWasteUnit] = useState([]);
   const [wastePrice, setWastePrice] = useState("");
@@ -38,6 +42,7 @@ export default function FormWastePrice({ onFormSubmit }) {
       const data = await response.json();
 
       setWasteType(data.data);
+      setWasteTypes(data.data);
     } catch (error) {
       console.error("Error fetching waste types:", error);
     }
@@ -61,6 +66,7 @@ export default function FormWastePrice({ onFormSubmit }) {
       const data = await response.json();
 
       setWasteUnit(data.data);
+      setWasteUnits(data.data);
     } catch (error) {
       console.error(error);
     }
@@ -76,6 +82,9 @@ export default function FormWastePrice({ onFormSubmit }) {
       const endDate = new Date(startDate);
       endDate.setDate(startDate.getDate() + 30); // Add 30 days to the start date
 
+      console.log("Start date:", startDate.toISOString());
+      console.log("End date:", endDate.toISOString());
+
       const response = await fetch("http://localhost:5000/api/pricelist", {
         method: "POST",
         headers: {
@@ -89,8 +98,8 @@ export default function FormWastePrice({ onFormSubmit }) {
           uom_id: parseInt(wasteUnitId),
           price: parseInt(wastePrice),
           isActive: true,
-          start_date: startDate.toString(), // Set the current date for start_date
-          end_date: endDate.toString(), // Set end_date to 30 days after start_date
+          start_date: startDate.toISOString(), // Use ISO format for start_date
+          end_date: endDate.toISOString(), // Use ISO format for end_date
         }),
       });
 
@@ -103,6 +112,8 @@ export default function FormWastePrice({ onFormSubmit }) {
       setWastePrice("");
       setWasteTypeId("");
       setWasteUnitId("");
+
+      onFormSubmit();
     } catch (error) {
       console.error("Error creating price list:", error);
     }
@@ -126,8 +137,8 @@ export default function FormWastePrice({ onFormSubmit }) {
         label: item.unit,
       }))
     );
-    console.log("Updated wasteType:", wasteType);
-    console.log("Updated wasteUnit:", wasteUnit);
+    // console.log("Updated wasteType:", wasteType);
+    // console.log("Updated wasteUnit:", wasteUnit);
   }, [wasteType, wasteUnit]);
 
   return (

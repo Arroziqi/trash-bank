@@ -41,6 +41,8 @@ export default function TableWasteCategory({ isDataUpdated }) {
         throw new Error("Token is missing.");
       }
 
+      const userRole = Cookies.get("user-role");
+
       const response = await fetch(
         `${API_BASE_URL}/waste-category/delete/${id}`,
         {
@@ -48,6 +50,7 @@ export default function TableWasteCategory({ isDataUpdated }) {
           headers: {
             "Content-Type": "application/json",
             Authorization: token, // Token dari cookies
+            Cookie: `user-role=${encodeURIComponent(userRole)}`,
           },
           credentials: "include", // Sertakan cookies di request
         }
