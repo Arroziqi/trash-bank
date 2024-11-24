@@ -6,6 +6,7 @@ import ThDataMaster from "../../data-master/components/table/th";
 import { useEffect, useState } from "react";
 import Cookies from "js-cookie";
 import { API_BASE_URL } from "@/app/const/const";
+import { formatDate } from "../service/transactionService";
 
 export default function TableSession() {
   const [token, setToken] = useState(null);
@@ -57,18 +58,25 @@ export default function TableSession() {
         </tr>
       </thead>
       <tbody>
-        <tr>
-          <TdDataMaster>10-01-2023</TdDataMaster>
-          <TdDataMaster>10 Kg</TdDataMaster>
-          <TdDataMaster>Rp. 100.000</TdDataMaster>
-          <TdDataMaster>
-            <div className="flex gap-4">
-              <PrimaryLink text={"Lihat"} href={"/transaction/3"} />
-              <PrimaryLink text={"Edit"} />
-              <DangerLink text={"Hapus"} />
-            </div>
-          </TdDataMaster>
-        </tr>
+        {transactions.map((transaction) => (
+          <tr key={transaction.id}>
+            <TdDataMaster>
+              {formatDate(transaction.transaction_date)}
+            </TdDataMaster>
+            <TdDataMaster>10Kg</TdDataMaster>
+            <TdDataMaster>{transaction.total}</TdDataMaster>
+            <TdDataMaster>
+              <div className="flex gap-4">
+                <PrimaryLink
+                  text={"Lihat"}
+                  href={`/transaction/${transaction.id}`}
+                />
+                <PrimaryLink text={"Edit"} />
+                <DangerLink text={"Hapus"} />
+              </div>
+            </TdDataMaster>
+          </tr>
+        ))}
       </tbody>
     </table>
   );

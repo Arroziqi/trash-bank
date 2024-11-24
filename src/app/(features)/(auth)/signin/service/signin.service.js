@@ -28,6 +28,7 @@ export default async function signIn({ usernameOrPhone, password }) {
 
     cookieStore.set("token", data.user.token);
     cookieStore.set("user-role", data.user.role);
+    cookieStore.set("id", data.user.id);
 
     const isAdmin = await bcrypt.compare("Admin", data.user.role);
     // const isAdmin = data.user.role === "Admin";

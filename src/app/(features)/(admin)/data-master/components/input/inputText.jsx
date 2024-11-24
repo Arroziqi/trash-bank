@@ -5,11 +5,13 @@ export default function InputText({
   label,
   placeholder,
   onChange = () => {},
+  value,
 }) {
   return (
     <div className="flex gap-[80px] justify-between items-center">
       <Label className="shrink-0" text={label} id={id} />
       <input
+        value={value}
         onChange={onChange}
         id={id}
         type="text"
