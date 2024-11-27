@@ -4,7 +4,7 @@ export default function NavbarUserMenu() {
   return (
     <ul className="flex justify-center gap-20">
       <li>
-        <NavbarItem text="Home" href="/" />
+        <NavbarItem text="Dashboard" href="/dashboard" />
       </li>
       <li>
         <NavbarItem text="My Warehouse " href="/" />

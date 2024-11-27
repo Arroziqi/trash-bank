@@ -19,6 +19,9 @@ export default async function signIn({ usernameOrPhone, password }) {
       }),
     });
 
+    console.log(response);
+    
+
     if (!response.ok) {
       throw new Error("Invalid username or password");
     }
@@ -30,8 +33,8 @@ export default async function signIn({ usernameOrPhone, password }) {
     cookieStore.set("user-role", data.user.role);
     cookieStore.set("id", data.user.id);
 
-    const isAdmin = await bcrypt.compare("Admin", data.user.role);
-    // const isAdmin = data.user.role === "Admin";
+    // const isAdmin = await bcrypt.compare("Admin", data.user.role);
+    const isAdmin = data.user.role === "Admin";
 
     return { data, isAdmin };
   } catch (error) {

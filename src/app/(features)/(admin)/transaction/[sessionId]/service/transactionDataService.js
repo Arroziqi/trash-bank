@@ -36,8 +36,8 @@ export const createTransactionData = async (transactionDataArray) => {
 };
 
 // api.js
-export const fetchTransactionData = async () => {
-  const url = "http://localhost:5000/api/transactionData/list";
+export const fetchTransactionData = async (transaction_id) => {
+  const url = `http://localhost:5000/api/transactionData/list/?transaction_id=${transaction_id}`;
   const token = Cookies.get("token");
 
   try {

@@ -27,7 +27,7 @@ export default function FormSignin() {
       if (response.isAdmin) {
         router.push("/dashboard");
       } else {
-        router.push("/profile");
+        alert("Anda bukan admin!");
       }
     } catch (error) {
       throw new Error(error.message);

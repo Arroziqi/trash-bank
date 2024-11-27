@@ -11,6 +11,8 @@ export default function UserProfilePage() {
   const [username, setUsername] = useState("");
   const [phone, setPhone] = useState("");
   const [address, setAddress] = useState("");
+  const [imgFile, setImgFile] = useState(null);
+  const [previewUrl, setPreviewUrl] = useState("");
 
   const router = useRouter();
 
@@ -54,6 +56,24 @@ export default function UserProfilePage() {
     }
   };
 
+  const onChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      // Membuat URL untuk preview
+      const objectUrl = URL.createObjectURL(file);
+      setPreviewUrl(objectUrl);
+      setImgFile(file);
+      console.log("Selected file:", file.name); // Nama file
+    } else {
+      console.error("No file selected");
+    }
+  };
+
+  const onSubmit = async (e) => {
+    e.preventDefault();
+  
+  }
+
   useEffect(() => {
     fetchUser();
   }, []);
@@ -65,7 +85,7 @@ export default function UserProfilePage() {
           action=""
           className="rounded-[10px] border border-[#00000085] shadow w-full h-full py-[31px] px-[56px] flex flex-col gap-6"
         >
-          <InputProfileImage />
+          <InputProfileImage onChange={onChange} imgUrl={previewUrl} />
           <br />
           <InputTextProfile
             label={"Username"}
@@ -78,12 +98,6 @@ export default function UserProfilePage() {
             id={"noHandphone"}
             value={phone}
             onchange={(e) => setPhone(e.target.value)}
-          />
-          <InputTextProfile
-            label={"Alamat"}
-            id={"address"}
-            value={address}
-            onchange={(e) => setAddress(e.target.value)}
           />
           <div className="flex gap-4 justify-end">
             <RingProfileButton

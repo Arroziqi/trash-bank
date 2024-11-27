@@ -6,8 +6,6 @@ import PrimaryLink from "../../../data-master/components/link/primaryLink";
 import TdDataMaster from "../../../data-master/components/table/td";
 import ThDataMaster from "../../../data-master/components/table/th";
 import { useEffect, useState } from "react";
-import Cookies from "js-cookie";
-import { API_BASE_URL } from "@/app/const/const";
 import {
   fetchSingleTransactionData,
   fetchTransactionData,
@@ -24,8 +22,8 @@ export default function TableTransaction({ isDataUpdated, sessionId }) {
   useEffect(() => {
     const loadData = async () => {
       try {
-        const data = await fetchSingleTransactionData(sessionId);
-        // const data = await fetchTransactionData();
+        // const data = await fetchSingleTransactionData(sessionId);
+        const data = await fetchTransactionData(sessionId);
         console.log(data);
 
         if (data.data) {

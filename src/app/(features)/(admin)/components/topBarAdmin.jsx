@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Color from "../const/color";
+import Link from "next/link";
 
 export default function TopBarAdmin() {
   return (
@@ -9,7 +10,14 @@ export default function TopBarAdmin() {
     >
       <div className="flex gap-3 items-center justify-end">
         <Image src="/img/icons/bell.svg" alt="Logo" width={26} height={26} />
-        <Image src="/img/icons/person.svg" alt="Logo" width={48} height={48} />
+        <Link href="/profile">
+          <Image
+            src="/img/icons/person.svg"
+            alt="Logo"
+            width={48}
+            height={48}
+          />
+        </Link>
       </div>
     </div>
   );
