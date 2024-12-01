@@ -6,13 +6,11 @@ import Heading1 from "../../components/heading1";
 import InputSelect from "../../components/input/inputSelect";
 import InputSubmit from "../../components/input/inputSubmit";
 import InputText from "../../components/input/inputText";
-import Cookies from "js-cookie";
 
 export default function FormWasteType({
   onFormSubmit,
   setOptionsWasteCategories,
 }) {
-  const [token, setToken] = useState(null);
   const [wasteCategories, setWasteCategories] = useState([]);
   const [options, setOptions] = useState([]);
   const [newWasteType, setNewWasteType] = useState("");
@@ -37,34 +35,25 @@ export default function FormWasteType({
     e.preventDefault(); // Prevent form from reloading the page
 
     try {
-      const response = await fetch(
-        "http://localhost:5000/api/waste-type/create",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: token, // Use token directly in header
-          },
-          body: JSON.stringify({
-            waste_category_id: wasteCategoryId,
-            type: newWasteType,
-          }),
-          credentials: "include", // Ensures cookies (including token and user-role) are sent with the request
-        }
-      );
-
-      if (!response.ok) {
-        throw new Error("Failed to create waste type");
-      }
+      const response = await fetch("/api/waste-type/create", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ wasteCategoryId, newWasteType }),
+      });
 
       const data = await response.json();
-      console.log("Waste type created successfully:", data);
 
-      setNewWasteType("");
+      console.log(data);
+
+      if (!response.ok) {
+        alert(data.message);
+      } else {
+        alert(data.message);
+      }
+
       onFormSubmit();
-    } catch (error) {
-      console.error("Error creating waste type:", error);
-      // Handle error (e.g., show an error message)
+    } catch (err) {
+      alert(err.message);
     }
   };
 
@@ -79,8 +68,6 @@ export default function FormWasteType({
 
   useEffect(() => {
     fetchData();
-    const tokenValue = Cookies.get("token");
-    setToken(tokenValue);
   }, []);
 
   return (

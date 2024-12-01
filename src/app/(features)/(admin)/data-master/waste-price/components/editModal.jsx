@@ -7,8 +7,6 @@ import {
   DialogPanel,
   DialogTitle,
 } from "@headlessui/react";
-import { API_BASE_URL } from "@/app/const/const";
-import Cookies from "js-cookie";
 
 export default function EditModal({
   openModal,
@@ -36,40 +34,30 @@ export default function EditModal({
   const onSubmit = async (e) => {
     e.preventDefault();
     try {
-      const tokenValue = Cookies.get("token");
-      const userRole = Cookies.get("user-role");
-
-      console.log(newWasteTypeId, newUnitId, newPrice, tokenValue, userRole);
-
       const response = await fetch(
-        `http://localhost:5000/api/pricelist/update`,
+        `/api/waste-price/update/${newWasteTypeId}/${newUnitId}`,
         {
-          method: "PATCH",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: tokenValue,
-            Cookie: `user-role=${encodeURIComponent(userRole)}`,
-          },
-          credentials: "include",
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
-            waste_type_id: newWasteTypeId,
-            uom_id: newUnitId,
             price: newPrice,
-            isActive: true,
-            start_date: "2022-01-01T00:00:00.000Z",
-            end_date: "2022-12-31T00:00:00.000Z",
           }),
         }
       );
 
-      if (!response.ok) throw new Error("Failed to update waste price");
-
       const data = await response.json();
-      console.log("Waste price updated successfully:", data);
 
-      fetchData(); // Refresh list after updating
+      console.log(data);
+
+      if (!response.ok) {
+        alert(data.message);
+      } else {
+        alert(data.message);
+      }
+
+      fetchData();
     } catch (error) {
-      console.error("Error updating waste price:", error);
+      console.log(error);
     }
   };
 

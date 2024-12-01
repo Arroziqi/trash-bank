@@ -7,8 +7,6 @@ import {
   DialogPanel,
   DialogTitle,
 } from "@headlessui/react";
-import { API_BASE_URL } from "@/app/const/const";
-import Cookies from "js-cookie";
 
 export default function EditModal({
   openModal,
@@ -20,7 +18,6 @@ export default function EditModal({
   const [open, setOpen] = useState(openModal);
   const [newUnitOfMeasurementName, setNewUnitOfMeasurementName] = useState(unitOfMeasurement);
   const [unitOfMeasurementId, setUnitOfMeasurementId] = useState(id);
-  const [token, setToken] = useState(null);
 
   const closeModalHandler = (e) => {
     closeModal(e);
@@ -30,33 +27,29 @@ export default function EditModal({
   const onSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch(
-        `${API_BASE_URL}/uom/update/${unitOfMeasurementId}`,
-        {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: token, // Token dari cookies
-          },
-          credentials: "include", // Sertakan cookies di request
-          body: JSON.stringify({
-            unit: newUnitOfMeasurementName,
-            isDeleted: true,
-          }),
-        }
-      );
-      const result = await response.json();
-      console.log(result);
+      const response = await fetch(`/api/unit-of-measurement/update/${unitOfMeasurementId}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          unit: newUnitOfMeasurementName
+        }),
+      });
+
+      const data = await response.json();
+
+      console.log(data);
+
+      if (!response.ok) {
+        alert(data.message);
+      } else {
+        alert(data.message);
+      }
 
       fetchData();
     } catch (error) {
       console.log(error);
     }
   };
-
-  useEffect(() => {
-    setToken(Cookies.get("token"));
-  }, []);
 
   useEffect(() => {
     setOpen(openModal);

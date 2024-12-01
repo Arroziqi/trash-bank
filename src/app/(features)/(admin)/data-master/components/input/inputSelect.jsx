@@ -1,10 +1,17 @@
 import Label from "../label";
 
-export default function InputSelect({ options, id, label, onChange }) {
+export default function InputSelect({
+  options,
+  id,
+  label,
+  onChange,
+  disabled = false,
+}) {
   return (
     <div className="flex justify-between items-center">
       <Label className="shrink-0" text={label} id={id} />
       <select
+        disabled={disabled}
         name={id}
         id={id}
         onChange={(e) => onChange(e.target.value)} // Call onChange with selected value

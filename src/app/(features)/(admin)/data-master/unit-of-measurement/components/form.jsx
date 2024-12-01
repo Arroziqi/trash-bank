@@ -5,52 +5,35 @@ import FormContainer from "../../components/formContainer";
 import Heading1 from "../../components/heading1";
 import InputSubmit from "../../components/input/inputSubmit";
 import InputText from "../../components/input/inputText";
-import { API_BASE_URL } from "@/app/const/const";
-import Cookies from "js-cookie";
 
 export default function FormUnitOfMeasurement({ onCreated }) {
-  const [token, setToken] = useState(null);
   const [unitOfMeasurement, setUnitOfMeasurement] = useState("");
 
   const onSubmit = async (e) => {
     e.preventDefault();
 
     try {
-      const response = await fetch(`${API_BASE_URL}/uom/create`, {
+      const response = await fetch("/api/unit-of-measurement/create", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: token, // Token dari cookies
-        },
-        credentials: "include", // Sertakan cookies di request
-        body: JSON.stringify({
-          unit: unitOfMeasurement,
-          isDeleted: false,
-        }),
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ unit: unitOfMeasurement }),
       });
 
+      const data = await response.json();
+
+      console.log(data);
+
       if (!response.ok) {
-        const errorData = await response.json(); // Mengambil pesan error dari backend
-        throw new Error(
-          errorData.error || "Failed to create unit of measurement"
-        );
+        alert(data.message);
+      } else {
+        alert(data.message);
       }
 
-      const responseData = await response.json();
-
-      // Reset form setelah submit berhasil
-      setUnitOfMeasurement("");
-
       onCreated();
-    } catch (error) {
-      throw new Error("Failed to create unit of measurement", error);
+    } catch (err) {
+      alert(err.message);
     }
   };
-
-  useEffect(() => {
-    const tokenValue = Cookies.get("token");
-    setToken(tokenValue);
-  }, []);
 
   return (
     <FormContainer onSubmit={onSubmit}>

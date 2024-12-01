@@ -6,8 +6,6 @@ import Heading1 from "../../components/heading1";
 import InputSelect from "../../components/input/inputSelect";
 import InputSubmit from "../../components/input/inputSubmit";
 import InputText from "../../components/input/inputText";
-import Cookies from "js-cookie";
-import { API_BASE_URL } from "@/app/const/const";
 
 export default function FormWastePrice({
   onFormSubmit,
@@ -17,51 +15,35 @@ export default function FormWastePrice({
   const [wasteType, setWasteType] = useState([]);
   const [wasteUnit, setWasteUnit] = useState([]);
   const [wastePrice, setWastePrice] = useState("");
-  const [wasteTypeId, setWasteTypeId] = useState("");
-  const [wasteUnitId, setWasteUnitId] = useState("");
+  const [wasteTypeId, setWasteTypeId] = useState("1");
+  const [wasteUnitId, setWasteUnitId] = useState("2");
   const [wasteTypeOptions, setWasteTypeOptions] = useState([]);
   const [wasteUnitOptions, setWasteUnitOptions] = useState([]);
 
   const fetchWasteType = async () => {
     try {
-      const tokenValue = Cookies.get("token");
-
-      const response = await fetch("http://localhost:5000/api/waste-type/get", {
+      const response = await fetch("/api/waste-type/getAll", {
         method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: tokenValue, // Authorization token
-        },
-        credentials: "include", // Ensures cookies (e.g., token and user-role) are sent with the request
       });
-
       if (!response.ok) {
-        throw new Error("Failed to fetch waste types");
+        throw new Error("Failed to fetch waste type data");
       }
-
       const data = await response.json();
 
       setWasteType(data.data);
       setWasteTypes(data.data);
     } catch (error) {
-      console.error("Error fetching waste types:", error);
+      console.error(error);
     }
   };
 
   const fetchWasteUnit = async () => {
     try {
-      const tokenValue = Cookies.get("token");
-
-      const response = await fetch(`${API_BASE_URL}/uom/get`, {
+      const response = await fetch("/api/unit-of-measurement/getAll", {
         method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: tokenValue, // Token dari cookies
-        },
-        credentials: "include", // Sertakan cookies di request
       });
       if (!response.ok) {
-        throw new Error("Failed to fetch unit of measurement data");
+        throw new Error("Failed to fetch waste unit data");
       }
       const data = await response.json();
 
@@ -75,47 +57,29 @@ export default function FormWastePrice({
   const onSubmit = async (e) => {
     e.preventDefault();
     try {
-      const tokenValue = Cookies.get("token"); // Retrieve token from cookies
-
-      // Calculate end_date as 30 days after start_date
-      const startDate = new Date();
-      const endDate = new Date(startDate);
-      endDate.setDate(startDate.getDate() + 30); // Add 30 days to the start date
-
-      console.log("Start date:", startDate.toISOString());
-      console.log("End date:", endDate.toISOString());
-
-      const response = await fetch("http://localhost:5000/api/pricelist", {
+      const response = await fetch("/api/waste-price/create", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Accept: "application/json",
-          Authorization: tokenValue,
-        },
-        credentials: "include", // Sends cookies like `user-role`
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          waste_type_id: parseInt(wasteTypeId),
-          uom_id: parseInt(wasteUnitId),
-          price: parseInt(wastePrice),
-          isActive: true,
-          start_date: startDate.toISOString(), // Use ISO format for start_date
-          end_date: endDate.toISOString(), // Use ISO format for end_date
+          wasteTypeId: wasteTypeId,
+          unitId: wasteUnitId,
+          price: wastePrice,
         }),
       });
 
-      if (!response.ok) throw new Error("Failed to create price list");
-
       const data = await response.json();
-      console.log("Price list created successfully:", data);
 
-      // Optionally reset form fields after successful submission
-      setWastePrice("");
-      setWasteTypeId("");
-      setWasteUnitId("");
+      console.log(data);
+
+      if (!response.ok) {
+        alert(data.message);
+      } else {
+        alert(data.message);
+      }
 
       onFormSubmit();
-    } catch (error) {
-      console.error("Error creating price list:", error);
+    } catch (err) {
+      alert(err.message);
     }
   };
 
@@ -152,6 +116,7 @@ export default function FormWastePrice({
           onChange={setWasteTypeId}
         />
         <InputSelect
+          disabled={true}
           id={"waste-category"}
           label={"Satuan Sampah"}
           options={wasteUnitOptions}

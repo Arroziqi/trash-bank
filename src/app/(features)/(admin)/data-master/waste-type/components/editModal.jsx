@@ -32,32 +32,28 @@ export default function EditModal({
   const onSubmit = async (e) => {
     e.preventDefault();
     try {
-      const tokenValue = Cookies.get("token");
-      const response = await fetch(
-        `http://localhost:5000/api/waste-type/update/${wasteTypeId}`,
-        {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: tokenValue,
-          },
-          credentials: "include",
-          body: JSON.stringify({
-            type: newWasteType,
-            waste_category_id: wasteCategoryId,
-            isDeleted: false,
-          }),
-        }
-      );
-
-      if (!response.ok) throw new Error("Failed to update waste type");
+      const response = await fetch(`/api/waste-type/update/${wasteTypeId}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          wasteCategoryId,
+          newWasteType,
+        }),
+      });
 
       const data = await response.json();
-      console.log("Waste type updated successfully:", data);
 
-      fetchData(); // Refresh list after updating
+      console.log(data);
+
+      if (!response.ok) {
+        alert(data.message);
+      } else {
+        alert(data.message);
+      }
+
+      fetchData();
     } catch (error) {
-      console.error("Error updating waste type:", error);
+      console.log(error);
     }
   };
 
@@ -93,6 +89,7 @@ export default function EditModal({
                     </DialogTitle>
                     <div className="mt-2">
                       <select
+                        disabled
                         name={wasteCategoryId}
                         id={wasteCategoryId}
                         onChange={(e) => setWasteCategoryId(e.target.value)}

@@ -3,12 +3,9 @@
 import { useState, useEffect } from "react";
 import Color from "../../../const/color";
 import TdDataMaster from "../../components/table/td";
-import Cookies from "js-cookie";
-import { API_BASE_URL } from "@/app/const/const";
 import EditModal from "./editModal";
 
 export default function TableWasteType({ isDataUpdated, wasteCategories }) {
-  const [token, setToken] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [wasteType, setWasteType] = useState([]);
   const [wasteCategorySelected, setWasteCategorySelected] = useState(null);
@@ -17,27 +14,16 @@ export default function TableWasteType({ isDataUpdated, wasteCategories }) {
 
   const fetchData = async () => {
     try {
-      const tokenValue = Cookies.get("token");
-      setToken(tokenValue);
-
-      const response = await fetch("http://localhost:5000/api/waste-type/get", {
+      const response = await fetch("/api/waste-type/getAll", {
         method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: tokenValue, // Authorization token
-        },
-        credentials: "include", // Ensures cookies (e.g., token and user-role) are sent with the request
       });
-
       if (!response.ok) {
-        throw new Error("Failed to fetch waste types");
+        throw new Error("Failed to fetch waste type data");
       }
-
       const data = await response.json();
-
       setWasteType(data.data);
     } catch (error) {
-      console.error("Error fetching waste types:", error);
+      console.error(error);
     }
   };
 
@@ -53,46 +39,35 @@ export default function TableWasteType({ isDataUpdated, wasteCategories }) {
   const deleteData = async (id, e) => {
     e.preventDefault();
 
+    if (!id) {
+      console.error("ID is required to delete data.");
+      return;
+    }
+
     try {
-      if (!token) {
-        throw new Error("Token is missing.");
-      }
+      const response = await fetch(`/api/waste-type/delete/${id}`, {
+        method: "DELETE",
+      });
 
-      const userRole = Cookies.get("user-role");
+      const data = await response.json();
 
-      const response = await fetch(
-        `http://localhost:5000/api/waste-type/delete/${id}`,
-        {
-          method: "DELETE",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: token, // Token dari cookies
-            Cookie: `user-role=${encodeURIComponent(userRole)}`,
-          },
-          credentials: "include", // Sertakan cookies di request
-        }
-      );
-
-      console.log(response);
+      console.log(data);
 
       if (!response.ok) {
-        throw new Error(`Failed to delete waste type: ${response.status}`);
+        alert(data.message);
+      } else {
+        alert(data.message);
       }
 
-      fetchData(); // Panggil ulang data setelah delete berhasil
+      fetchData();
     } catch (error) {
-      console.error("Error:", error);
+      alert(error.message);
     }
   };
 
   useEffect(() => {
     fetchData();
   }, [isDataUpdated]);
-
-  // useEffect to observe changes in wasteType
-  useEffect(() => {
-    console.log("Updated wasteType:", wasteType);
-  }, [wasteType]);
 
   return (
     <>

@@ -2,13 +2,10 @@
 
 import { useEffect, useState } from "react";
 import Color from "../../../const/color";
-import Cookies from "js-cookie";
-import { API_BASE_URL } from "@/app/const/const";
 import EditModal from "./editModal";
 
 export default function TableUnitOfMeasurement({ isDataUpdated }) {
   const [unitOfMeasurement, setUnitOfMeasurement] = useState([]);
-  const [token, setToken] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [unitOfMeasurementSelected, setUnitOfMeasurementSelected] =
     useState(null);
@@ -17,20 +14,13 @@ export default function TableUnitOfMeasurement({ isDataUpdated }) {
 
   const fetchData = async () => {
     try {
-      const response = await fetch(`${API_BASE_URL}/uom/get`, {
+      const response = await fetch("/api/unit-of-measurement/getAll", {
         method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: token, // Token dari cookies
-        },
-        credentials: "include", // Sertakan cookies di request
       });
       if (!response.ok) {
         throw new Error("Failed to fetch unit of measurement data");
       }
       const data = await response.json();
-      console.log(data);
-
       setUnitOfMeasurement(data.data);
     } catch (error) {
       console.error(error);
@@ -46,28 +36,23 @@ export default function TableUnitOfMeasurement({ isDataUpdated }) {
     }
 
     try {
-      if (!token) {
-        throw new Error("Token is missing.");
-      }
-
-      const response = await fetch(`${API_BASE_URL}/uom/delete/${id}`, {
+      const response = await fetch(`/api/unit-of-measurement/delete/${id}`, {
         method: "DELETE",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: token, // Token dari cookies
-        },
-        credentials: "include", // Sertakan cookies di request
       });
 
+      const data = await response.json();
+
+      console.log(data);
+
       if (!response.ok) {
-        throw new Error(
-          `Failed to delete unit of measurement: ${response.status}`
-        );
+        alert(data.message);
+      } else {
+        alert(data.message);
       }
 
-      fetchData(); // Panggil ulang data setelah delete berhasil
+      fetchData();
     } catch (error) {
-      console.error("Error:", error);
+      alert(error.message);
     }
   };
 
@@ -80,16 +65,8 @@ export default function TableUnitOfMeasurement({ isDataUpdated }) {
   };
 
   useEffect(() => {
-    const tokenValue = Cookies.get("token");
-    setToken(tokenValue);
-  }, []);
-
-  useEffect(() => {
-    if (!token) {
-      return;
-    }
     fetchData();
-  }, [isDataUpdated, token]);
+  }, [isDataUpdated]);
 
   return (
     <>
@@ -112,7 +89,9 @@ export default function TableUnitOfMeasurement({ isDataUpdated }) {
         <tbody>
           {unitOfMeasurement.map((data) => (
             <tr key={data.id}>
-              <td className="py-[10px] px-3 border border-black">{data.unit}</td>
+              <td className="py-[10px] px-3 border border-black">
+                {data.unit}
+              </td>
               <td className="py-[10px] px-3 border border-black">
                 <div className="flex gap-4">
                   <a

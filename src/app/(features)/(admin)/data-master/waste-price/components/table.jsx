@@ -20,38 +20,19 @@ export default function TableWastePrice({
 
   const fetchData = async () => {
     try {
-      // Ambil nilai token dan user-role dari cookie
-      const token = Cookies.get("token"); // Pastikan key ini sesuai dengan cookie di browser
-      const userRole = Cookies.get("user-role");
-
-      // Pastikan token dan user-role tersedia
-      if (!token || !userRole) {
-        throw new Error("Token atau user-role tidak ditemukan di cookie");
-      }
-
-      // Kirim permintaan ke API
-      const response = await fetch("http://localhost:5000/api/pricelist/get", {
+      const response = await fetch("/api/waste-price/getAll", {
         method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: token,
-          Cookie: `user-role=${encodeURIComponent(userRole)}`,
-        },
-        credentials: "include", // Pastikan cookie terkirim dalam permintaan
       });
-
-      // Periksa apakah respons berhasil
       if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
+        throw new Error("Failed to fetch waste price data");
       }
-
-      // Parsing data JSON
       const data = await response.json();
+
+      console.log(data);
 
       setPricelist(data.data);
     } catch (error) {
-      console.error("Error fetching price list:", error);
-      throw error;
+      console.error(error);
     }
   };
 
@@ -59,29 +40,26 @@ export default function TableWastePrice({
     e.preventDefault();
 
     try {
-      const userRole = Cookies.get("user-role");
-      const token = Cookies.get("token");
-
       const response = await fetch(
-        `http://localhost:5000/api/pricelist/delete/${wasteId}/${unitId}`,
+        `/api/waste-price/delete/${wasteId}/${unitId}`,
         {
           method: "DELETE",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: token, // Token dari cookies
-            Cookie: `user-role=${encodeURIComponent(userRole)}`,
-          },
-          credentials: "include", // Sertakan cookies di request
         }
       );
 
+      const data = await response.json();
+
+      console.log(data);
+
       if (!response.ok) {
-        throw new Error(`Failed to delete waste category: ${response.status}`);
+        alert(data.message);
+      } else {
+        alert(data.message);
       }
 
-      fetchData(); // Panggil ulang data setelah delete berhasil
+      fetchData();
     } catch (error) {
-      console.error("Error:", error);
+      alert(error.message);
     }
   };
 
@@ -94,10 +72,6 @@ export default function TableWastePrice({
     setPriceSelectedId(id);
     setIsModalOpen((prev) => !prev);
   };
-
-  useEffect(() => {
-    console.log(wasteTypes, wasteUnits);
-  }, [wasteTypes, wasteUnits]);
 
   useEffect(() => {
     fetchData();
