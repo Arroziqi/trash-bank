@@ -18,8 +18,6 @@ export async function GET(req) {
   const url = `${API_BASE_URL}/payment-requests`;
 
   try {
-    console.log("Token:", token);
-
     const response = await fetch(url, {
       method: "GET",
       headers: {

@@ -2,13 +2,11 @@
 
 import { useEffect, useState } from "react";
 import Color from "../../../const/color";
-import Cookies from "js-cookie";
 import { API_BASE_URL } from "@/app/const/const";
 import EditModal from "./editModal";
 
 export default function TableWasteCategory({ isDataUpdated }) {
   const [wasteCategory, setWasteCategory] = useState([]);
-  const [token, setToken] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [wasteCategorySelected, setWasteCategorySelected] = useState(null);
   const [wasteCategorySelectedId, setWasteCategorySelectedId] = useState(null);
@@ -37,32 +35,23 @@ export default function TableWasteCategory({ isDataUpdated }) {
     }
 
     try {
-      if (!token) {
-        throw new Error("Token is missing.");
-      }
+      const response = await fetch(`/api/waste-category/delete/${id}`, {
+        method: "DELETE",
+      });
 
-      const userRole = Cookies.get("user-role");
+      const data = await response.json();
 
-      const response = await fetch(
-        `${API_BASE_URL}/waste-category/delete/${id}`,
-        {
-          method: "DELETE",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: token, // Token dari cookies
-            Cookie: `user-role=${encodeURIComponent(userRole)}`,
-          },
-          credentials: "include", // Sertakan cookies di request
-        }
-      );
+      console.log(data);
 
       if (!response.ok) {
-        throw new Error(`Failed to delete waste category: ${response.status}`);
+        alert(data.message);
+      } else {
+        alert(data.message);
       }
 
-      fetchData(); // Panggil ulang data setelah delete berhasil
+      fetchData();
     } catch (error) {
-      console.error("Error:", error);
+      alert(error.message);
     }
   };
 
@@ -73,11 +62,6 @@ export default function TableWasteCategory({ isDataUpdated }) {
     setWasteCategorySelectedId(id);
     setIsModalOpen((prev) => !prev);
   };
-
-  useEffect(() => {
-    const tokenValue = Cookies.get("token");
-    setToken(tokenValue);
-  }, []);
 
   useEffect(() => {
     fetchData();
