@@ -85,6 +85,19 @@ export default function SidebarMenuAdmin({}) {
               isActive={isActive("/content-management")}
             />
           </li>
+          <li>
+            <SidebarItemAdmin
+              className=""
+              href={"/payment-request"}
+              text={"Pencairan"}
+              iconUrl={
+                isActive("/payment-request")
+                  ? "/img/admin/money-dark.svg"
+                  : "/img/admin/money.svg"
+              }
+              isActive={isActive("/payment-request")}
+            />
+          </li>
         </ul>
         <ul className="flex flex-col gap-4 ">
           <li>
