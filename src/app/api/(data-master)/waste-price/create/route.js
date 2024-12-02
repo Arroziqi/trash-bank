@@ -52,7 +52,7 @@ export async function POST(request) {
         price: price,
         isActive: true,
         start_date: startDateISOString,
-        end_date: "",
+        end_date: startDateISOString,
       }),
     });
 
