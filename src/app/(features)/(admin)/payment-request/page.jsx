@@ -18,11 +18,12 @@ export default function PencairanPage() {
 
       if (data?.data) {
         const waitingPaymentRequests = data.data.filter(
-          (item) => item.confirmation_status === "Waiting_For_Confirmation"
+          (item) => item.confirmation_status === "Sedang_diproses"
         );
 
         const confirmedPaymentRequests = data.data.filter(
-          (item) => item.confirmation_status === "Success"
+          (item) =>
+            item.confirmation_status === "Ambil_uang" || "Selesei" || "Batal"
         );
         setPaymentRequests(waitingPaymentRequests);
         setHistoryPaymentRequests(confirmedPaymentRequests);
